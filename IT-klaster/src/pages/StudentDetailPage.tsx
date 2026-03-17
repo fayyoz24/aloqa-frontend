@@ -32,7 +32,7 @@ export default function StudentDetailPage() {
 
   const baseUrl = 'https://aloqabankstudents.pythonanywhere.com';
   const token = localStorage.getItem("access_token");
-  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+  const authHeaders: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
 
   const downloadBlob = async (res: Response, fileName: string) => {
     const blob = await res.blob();
@@ -70,7 +70,7 @@ export default function StudentDetailPage() {
     setDownloadingCert(`${langId}`);
     try {
       const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
-      const res = await fetch(fullUrl, { headers: authHeaders });
+      const res = await fetch(fullUrl, {headers: authHeaders });
       if (!res.ok) throw new Error(`Server javobi: ${res.status}`);
       await downloadBlob(res, `${langName}_sertifikat`);
     } catch (e: any) {
