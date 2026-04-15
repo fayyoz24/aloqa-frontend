@@ -210,42 +210,127 @@ function Avatar({ src, name, size = 48 }) {
 }
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
+// function Navbar({ onHome, dark = true }) {
+//   return (
+//     <nav style={{ ...css.nav, background: dark ? "rgba(10,22,40,0.92)" : COLORS.white, borderBottom: dark ? "1px solid rgba(255,255,255,0.08)" : `1px solid ${COLORS.border}` }}>
+//       <div style={css.logoGroup}>
+//         {/* Aloqabank Logo */}
+//         <div
+//           onClick={onHome}
+//           style={{ cursor: "pointer", display: "flex", flexDirection: "column" }}
+//         >
+//           <span style={{ ...css.logoText, color: dark ? COLORS.white : COLORS.navy, fontSize: "18px" }}>
+//             🏦 Aloqabank
+//           </span>
+//           <span style={{ ...css.logoSub, color: dark ? COLORS.goldSoft : COLORS.gold }}>
+//             Banking Excellence
+//           </span>
+//         </div>
+//         <div style={{ ...css.logoDivider, background: dark ? "rgba(255,255,255,0.2)" : COLORS.border }} />
+//         {/* IT Klaster Logo */}
+//         <div style={{ display: "flex", flexDirection: "column" }}>
+//           <span style={{ ...css.logoText, color: dark ? COLORS.goldSoft : COLORS.blue, fontSize: "18px" }}>
+//             💻 IT Klaster
+//           </span>
+//           <span style={{ ...css.logoSub, color: dark ? "rgba(255,255,255,0.5)" : COLORS.muted }}>
+//             Innovation Hub
+//           </span>
+//         </div>
+//       </div>
+//       <button
+//         onClick={onHome}
+//         style={{ ...css.btn, ...(dark ? css.btnOutline : { background: COLORS.surface, color: COLORS.navy, border: `1px solid ${COLORS.border}` }), fontSize: "13px", padding: "0.45rem 1rem" }}
+//       >
+//         ← Bosh sahifa
+//       </button>
+//     </nav>
+//   );
+// }
+
+
 function Navbar({ onHome, dark = true }) {
   return (
-    <nav style={{ ...css.nav, background: dark ? "rgba(10,22,40,0.92)" : COLORS.white, borderBottom: dark ? "1px solid rgba(255,255,255,0.08)" : `1px solid ${COLORS.border}` }}>
+    <nav
+      style={{
+        ...css.nav,
+        background: dark ? "rgba(10,22,40,0.92)" : COLORS.white,
+        borderBottom: dark
+          ? "1px solid rgba(255,255,255,0.08)"
+          : `1px solid ${COLORS.border}`,
+      }}
+    >
       <div style={css.logoGroup}>
         {/* Aloqabank Logo */}
         <div
           onClick={onHome}
-          style={{ cursor: "pointer", display: "flex", flexDirection: "column" }}
+          style={{
+            cursor: "pointer",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
         >
-          <span style={{ ...css.logoText, color: dark ? COLORS.white : COLORS.navy, fontSize: "18px" }}>
-            🏦 Aloqabank
-          </span>
-          <span style={{ ...css.logoSub, color: dark ? COLORS.goldSoft : COLORS.gold }}>
-            Banking Excellence
-          </span>
+          <img
+            src="/aloqa-logo.png"
+            alt="Aloqabank"
+            style={{
+              height: "32px",
+              objectFit: "contain",
+              filter: dark ? "brightness(0) invert(1)" : "none",
+            }}
+          />
         </div>
-        <div style={{ ...css.logoDivider, background: dark ? "rgba(255,255,255,0.2)" : COLORS.border }} />
+
+        <div
+          style={{
+            ...css.logoDivider,
+            background: dark
+              ? "rgba(255,255,255,0.2)"
+              : COLORS.border,
+          }}
+        />
+
         {/* IT Klaster Logo */}
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <span style={{ ...css.logoText, color: dark ? COLORS.goldSoft : COLORS.blue, fontSize: "18px" }}>
-            💻 IT Klaster
-          </span>
-          <span style={{ ...css.logoSub, color: dark ? "rgba(255,255,255,0.5)" : COLORS.muted }}>
-            Innovation Hub
-          </span>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src="/it-klaster-logo.png"
+            alt="IT Klaster"
+            style={{
+              height: "28px",
+              objectFit: "contain",
+              filter: dark ? "brightness(0) invert(1)" : "none",
+            }}
+          />
         </div>
       </div>
+
       <button
         onClick={onHome}
-        style={{ ...css.btn, ...(dark ? css.btnOutline : { background: COLORS.surface, color: COLORS.navy, border: `1px solid ${COLORS.border}` }), fontSize: "13px", padding: "0.45rem 1rem" }}
+        style={{
+          ...css.btn,
+          ...(dark
+            ? css.btnOutline
+            : {
+                background: COLORS.surface,
+                color: COLORS.navy,
+                border: `1px solid ${COLORS.border}`,
+              }),
+          fontSize: "13px",
+          padding: "0.45rem 1rem",
+        }}
       >
-        ← Bosh sahifa
+        ← Orqaga
       </button>
     </nav>
   );
 }
+
 
 // ─── Toast ────────────────────────────────────────────────────────────────────
 function Toast({ msg, type }) {

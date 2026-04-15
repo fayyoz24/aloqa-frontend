@@ -80,26 +80,325 @@ function Avatar({ src, name, size = 46 }) {
 }
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
+// function Navbar({ onHome, dark = true }) {
+//   return (
+//     <nav style={dark ? css.navDark : css.navLight}>
+//       <div style={{ display: "flex", alignItems: "center", gap: "1rem", cursor: "pointer" }} onClick={onHome}>
+//         <div>
+//           <div className="nav-logo-text" style={{ fontWeight: "bold", fontSize: "15px", letterSpacing: ".04em", color: dark ? "#fff" : COLORS.navy }}>🏦 Aloqabank</div>
+//           <div className="nav-logo-sub" style={{ fontSize: "9px", letterSpacing: ".12em", textTransform: "uppercase", marginTop: "1px", color: dark ? COLORS.goldSoft : COLORS.gold }}>Banking Excellence</div>
+//         </div>
+//         <div style={{ width: 1, height: 28, background: dark ? "rgba(255,255,255,.2)" : COLORS.border }} />
+//         <div>
+//           <div className="nav-logo-text" style={{ fontWeight: "bold", fontSize: "15px", letterSpacing: ".04em", color: dark ? COLORS.goldSoft : COLORS.blue }}>💻 IT Klaster</div>
+//           <div className="nav-logo-sub" style={{ fontSize: "9px", letterSpacing: ".12em", textTransform: "uppercase", marginTop: "1px", color: dark ? "rgba(255,255,255,.5)" : COLORS.muted }}>Innovation Hub</div>
+//         </div>
+//       </div>
+//       <button onClick={onHome} style={{ ...css.btn, background: dark ? "transparent" : COLORS.surface, color: dark ? "#fff" : COLORS.navy, border: dark ? "1px solid rgba(255,255,255,.3)" : `1px solid ${COLORS.border}`, fontSize: "12px", padding: ".4rem .9rem" }}>
+//         ← Bosh sahifa
+//       </button>
+//     </nav>
+//   );
+// }
+
+// function Navbar({ onHome, dark = true }) {
+//   return (
+//     <nav style={dark ? css.navDark : css.navLight}>
+//       <div
+//         style={{
+//           display: "flex",
+//           alignItems: "center",
+//           gap: "1rem",
+//           cursor: "pointer",
+//         }}
+//         onClick={onHome}
+//       >
+//         {/* Aloqabank Logo */}
+//         <img
+//           src="/aloqabank1.png"
+//           alt="Aloqabank"
+//           style={{
+//             height: "32px",
+//             objectFit: "contain",
+//             filter: dark ? "brightness(0) invert(1)" : "none",
+//           }}
+//         />
+
+//         {/* Divider */}
+//         <div
+//           style={{
+//             width: 1,
+//             height: 28,
+//             background: dark
+//               ? "rgba(255,255,255,.2)"
+//               : COLORS.border,
+//           }}
+//         />
+
+//         {/* IT Klaster Logo */}
+//         <img
+//           src="/logos/IT-klaster.svg"
+//           alt="IT Klaster"
+//           style={{
+//             height: "28px",
+//             objectFit: "contain",
+//             filter: dark ? "brightness(0) invert(1)" : "none",
+//           }}
+//         />
+//       </div>
+
+//       <button
+//         onClick={onHome}
+//         style={{
+//           ...css.btn,
+//           background: dark ? "transparent" : COLORS.surface,
+//           color: dark ? "#fff" : COLORS.navy,
+//           border: dark
+//             ? "1px solid rgba(255,255,255,.3)"
+//             : `1px solid ${COLORS.border}`,
+//           fontSize: "12px",
+//           padding: ".4rem .9rem",
+//         }}
+//       >
+//         ← Orqaga
+//       </button>
+//     </nav>
+//   );
+// }
+
+
+
+// function Navbar({ onHome, dark = true }) {
+//   return (
+//     <nav style={dark ? css.navDark : css.navLight}>
+//       <div
+//         onClick={onHome}
+//         style={{
+//           display: "flex",
+//           alignItems: "center",
+//           gap: "1rem",
+//           cursor: "pointer",
+//         }}
+//       >
+//         {/* Aloqabank Logo (wide → control width) */}
+//         <img
+//           src="logos/aloqabank3.png"
+//           alt="Aloqabank"
+//           style={{
+//             width: "140px",
+//             height: "auto",
+//             objectFit: "contain",
+//             filter: dark ? "brightness(0) invert(1)" : "none",
+//           }}
+//         />
+
+//         {/* Divider */}
+//         <div
+//           style={{
+//             width: 1,
+//             height: 30,
+//             background: dark
+//               ? "rgba(255,255,255,.2)"
+//               : COLORS.border,
+//           }}
+//         />
+
+//         {/* IT Klaster Logo (compact → control height) */}
+//         <img
+//           src="/logos/IT-klaster.svg"
+//           alt="IT Klaster"
+//           style={{
+//             height: "32px",
+//             objectFit: "contain",
+//             filter: dark ? "brightness(0) invert(1)" : "none",
+//           }}
+//         />
+//       </div>
+
+//       {/* Button */}
+//       <button
+//         onClick={onHome}
+//         style={{
+//           ...css.btn,
+//           background: dark ? "transparent" : COLORS.surface,
+//           color: dark ? "#fff" : COLORS.navy,
+//           border: dark
+//             ? "1px solid rgba(255,255,255,.3)"
+//             : `1px solid ${COLORS.border}`,
+//           fontSize: "12px",
+//           padding: ".4rem .9rem",
+//         }}
+//       >
+//         ← Orqaga
+//       </button>
+//     </nav>
+//   );
+// }
+
+// function Navbar({ onHome, dark = true }) {
+//   return (
+//     <nav style={dark ? css.navDark : css.navLight}>
+//       <div
+//         onClick={onHome}
+//         style={{
+//           display: "flex",
+//           alignItems: "center",
+//           gap: "1rem",
+//           cursor: "pointer",
+//         }}
+//       >
+//         {/* Aloqabank Logo */}
+//         <div
+//           style={{
+//             height: "32px",
+//             display: "flex",
+//             alignItems: "center",
+//             justifyContent: "center",
+//             // White pill background so the logo is always visible on dark navbar
+//             background: dark ? "rgba(255,255,255,0.12)" : "transparent",
+//             borderRadius: "6px",
+//             padding: dark ? "3px 8px" : "0",
+//             transition: "background 0.2s",
+//           }}
+//         >
+//           <img
+//             src="/logos/aloqabank3.png"
+//             alt="Aloqabank"
+//             style={{
+//               height: "26px",
+//               width: "auto",
+//               objectFit: "contain",
+//               display: "block",
+//             }}
+//           />
+//         </div>
+
+//         {/* Divider */}
+//         <div
+//           style={{
+//             width: 1,
+//             height: 30,
+//             background: dark ? "rgba(255,255,255,.2)" : COLORS.border,
+//             flexShrink: 0,
+//           }}
+//         />
+
+//         {/* IT Klaster Logo */}
+//         <img
+//           src="/logos/IT-klaster.svg"
+//           alt="IT Klaster"
+//           style={{
+//             height: "32px",
+//             width: "auto",
+//             objectFit: "contain",
+//             filter: dark ? "brightness(0) invert(1)" : "none",
+//             display: "block",
+//           }}
+//         />
+//       </div>
+
+//       {/* Back button */}
+//       <button
+//         onClick={onHome}
+//         style={{
+//           ...css.btn,
+//           background: dark ? "transparent" : COLORS.surface,
+//           color: dark ? "#fff" : COLORS.navy,
+//           border: dark
+//             ? "1px solid rgba(255,255,255,.3)"
+//             : `1px solid ${COLORS.border}`,
+//           fontSize: "12px",
+//           padding: ".4rem .9rem",
+//         }}
+//       >
+//         ← Orqaga
+//       </button>
+//     </nav>
+//   );
+// }
+
 function Navbar({ onHome, dark = true }) {
   return (
     <nav style={dark ? css.navDark : css.navLight}>
-      <div style={{ display: "flex", alignItems: "center", gap: "1rem", cursor: "pointer" }} onClick={onHome}>
-        <div>
-          <div className="nav-logo-text" style={{ fontWeight: "bold", fontSize: "15px", letterSpacing: ".04em", color: dark ? "#fff" : COLORS.navy }}>🏦 Aloqabank</div>
-          <div className="nav-logo-sub" style={{ fontSize: "9px", letterSpacing: ".12em", textTransform: "uppercase", marginTop: "1px", color: dark ? COLORS.goldSoft : COLORS.gold }}>Banking Excellence</div>
+      <div
+        onClick={onHome}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "1rem",
+          cursor: "pointer",
+        }}
+      >
+        {/* Aloqabank Logo */}
+        <div
+          style={{
+            height: "44px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            // White pill background so the logo is always visible on dark navbar
+            background: dark ? "rgba(255,255,255,0.12)" : "transparent",
+            borderRadius: "6px",
+            padding: dark ? "3px 8px" : "0",
+            transition: "background 0.2s",
+          }}
+        >
+          <img
+            src="/logos/aloqabank4.png"
+            alt="Aloqabank"
+            style={{
+              height: "44px",
+              width: "auto",
+              objectFit: "contain",
+              display: "block",
+            }}
+          />
         </div>
-        <div style={{ width: 1, height: 28, background: dark ? "rgba(255,255,255,.2)" : COLORS.border }} />
-        <div>
-          <div className="nav-logo-text" style={{ fontWeight: "bold", fontSize: "15px", letterSpacing: ".04em", color: dark ? COLORS.goldSoft : COLORS.blue }}>💻 IT Klaster</div>
-          <div className="nav-logo-sub" style={{ fontSize: "9px", letterSpacing: ".12em", textTransform: "uppercase", marginTop: "1px", color: dark ? "rgba(255,255,255,.5)" : COLORS.muted }}>Innovation Hub</div>
-        </div>
+
+        {/* Divider */}
+        <div
+          style={{
+            width: 1,
+            height: 30,
+            background: dark ? "rgba(255,255,255,.2)" : COLORS.border,
+            flexShrink: 0,
+          }}
+        />
+
+        {/* IT Klaster Logo */}
+        <img
+          src="/logos/IT-klaster.svg"
+          alt="IT Klaster"
+          style={{
+            height: "32px",
+            width: "auto",
+            objectFit: "contain",
+            filter: dark ? "brightness(0) invert(1)" : "none",
+            display: "block",
+          }}
+        />
       </div>
-      <button onClick={onHome} style={{ ...css.btn, background: dark ? "transparent" : COLORS.surface, color: dark ? "#fff" : COLORS.navy, border: dark ? "1px solid rgba(255,255,255,.3)" : `1px solid ${COLORS.border}`, fontSize: "12px", padding: ".4rem .9rem" }}>
-        ← Bosh sahifa
+
+      {/* Back button */}
+      <button
+        onClick={onHome}
+        style={{
+          ...css.btn,
+          background: dark ? "transparent" : COLORS.surface,
+          color: dark ? "#fff" : COLORS.navy,
+          border: dark
+            ? "1px solid rgba(255,255,255,.3)"
+            : `1px solid ${COLORS.border}`,
+          fontSize: "12px",
+          padding: ".4rem .9rem",
+        }}
+      >
+        ← Orqaga
       </button>
     </nav>
   );
 }
+
 
 // ─── Toast ────────────────────────────────────────────────────────────────────
 function Toast({ msg, type }) {
