@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-
+import * as XLSX from "xlsx";
 const API_BASE = "https://aloqabankstudents.pythonanywhere.com/api/students";
 const IMG_ROOT = "https://aloqabankstudents.pythonanywhere.com/media/";
 
@@ -80,242 +80,6 @@ function Avatar({ src, name, size = 46 }) {
 }
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
-// function Navbar({ onHome, dark = true }) {
-//   return (
-//     <nav style={dark ? css.navDark : css.navLight}>
-//       <div style={{ display: "flex", alignItems: "center", gap: "1rem", cursor: "pointer" }} onClick={onHome}>
-//         <div>
-//           <div className="nav-logo-text" style={{ fontWeight: "bold", fontSize: "15px", letterSpacing: ".04em", color: dark ? "#fff" : COLORS.navy }}>🏦 Aloqabank</div>
-//           <div className="nav-logo-sub" style={{ fontSize: "9px", letterSpacing: ".12em", textTransform: "uppercase", marginTop: "1px", color: dark ? COLORS.goldSoft : COLORS.gold }}>Banking Excellence</div>
-//         </div>
-//         <div style={{ width: 1, height: 28, background: dark ? "rgba(255,255,255,.2)" : COLORS.border }} />
-//         <div>
-//           <div className="nav-logo-text" style={{ fontWeight: "bold", fontSize: "15px", letterSpacing: ".04em", color: dark ? COLORS.goldSoft : COLORS.blue }}>💻 IT Klaster</div>
-//           <div className="nav-logo-sub" style={{ fontSize: "9px", letterSpacing: ".12em", textTransform: "uppercase", marginTop: "1px", color: dark ? "rgba(255,255,255,.5)" : COLORS.muted }}>Innovation Hub</div>
-//         </div>
-//       </div>
-//       <button onClick={onHome} style={{ ...css.btn, background: dark ? "transparent" : COLORS.surface, color: dark ? "#fff" : COLORS.navy, border: dark ? "1px solid rgba(255,255,255,.3)" : `1px solid ${COLORS.border}`, fontSize: "12px", padding: ".4rem .9rem" }}>
-//         ← Bosh sahifa
-//       </button>
-//     </nav>
-//   );
-// }
-
-// function Navbar({ onHome, dark = true }) {
-//   return (
-//     <nav style={dark ? css.navDark : css.navLight}>
-//       <div
-//         style={{
-//           display: "flex",
-//           alignItems: "center",
-//           gap: "1rem",
-//           cursor: "pointer",
-//         }}
-//         onClick={onHome}
-//       >
-//         {/* Aloqabank Logo */}
-//         <img
-//           src="/aloqabank1.png"
-//           alt="Aloqabank"
-//           style={{
-//             height: "32px",
-//             objectFit: "contain",
-//             filter: dark ? "brightness(0) invert(1)" : "none",
-//           }}
-//         />
-
-//         {/* Divider */}
-//         <div
-//           style={{
-//             width: 1,
-//             height: 28,
-//             background: dark
-//               ? "rgba(255,255,255,.2)"
-//               : COLORS.border,
-//           }}
-//         />
-
-//         {/* IT Klaster Logo */}
-//         <img
-//           src="/logos/IT-klaster.svg"
-//           alt="IT Klaster"
-//           style={{
-//             height: "28px",
-//             objectFit: "contain",
-//             filter: dark ? "brightness(0) invert(1)" : "none",
-//           }}
-//         />
-//       </div>
-
-//       <button
-//         onClick={onHome}
-//         style={{
-//           ...css.btn,
-//           background: dark ? "transparent" : COLORS.surface,
-//           color: dark ? "#fff" : COLORS.navy,
-//           border: dark
-//             ? "1px solid rgba(255,255,255,.3)"
-//             : `1px solid ${COLORS.border}`,
-//           fontSize: "12px",
-//           padding: ".4rem .9rem",
-//         }}
-//       >
-//         ← Orqaga
-//       </button>
-//     </nav>
-//   );
-// }
-
-
-
-// function Navbar({ onHome, dark = true }) {
-//   return (
-//     <nav style={dark ? css.navDark : css.navLight}>
-//       <div
-//         onClick={onHome}
-//         style={{
-//           display: "flex",
-//           alignItems: "center",
-//           gap: "1rem",
-//           cursor: "pointer",
-//         }}
-//       >
-//         {/* Aloqabank Logo (wide → control width) */}
-//         <img
-//           src="logos/aloqabank3.png"
-//           alt="Aloqabank"
-//           style={{
-//             width: "140px",
-//             height: "auto",
-//             objectFit: "contain",
-//             filter: dark ? "brightness(0) invert(1)" : "none",
-//           }}
-//         />
-
-//         {/* Divider */}
-//         <div
-//           style={{
-//             width: 1,
-//             height: 30,
-//             background: dark
-//               ? "rgba(255,255,255,.2)"
-//               : COLORS.border,
-//           }}
-//         />
-
-//         {/* IT Klaster Logo (compact → control height) */}
-//         <img
-//           src="/logos/IT-klaster.svg"
-//           alt="IT Klaster"
-//           style={{
-//             height: "32px",
-//             objectFit: "contain",
-//             filter: dark ? "brightness(0) invert(1)" : "none",
-//           }}
-//         />
-//       </div>
-
-//       {/* Button */}
-//       <button
-//         onClick={onHome}
-//         style={{
-//           ...css.btn,
-//           background: dark ? "transparent" : COLORS.surface,
-//           color: dark ? "#fff" : COLORS.navy,
-//           border: dark
-//             ? "1px solid rgba(255,255,255,.3)"
-//             : `1px solid ${COLORS.border}`,
-//           fontSize: "12px",
-//           padding: ".4rem .9rem",
-//         }}
-//       >
-//         ← Orqaga
-//       </button>
-//     </nav>
-//   );
-// }
-
-// function Navbar({ onHome, dark = true }) {
-//   return (
-//     <nav style={dark ? css.navDark : css.navLight}>
-//       <div
-//         onClick={onHome}
-//         style={{
-//           display: "flex",
-//           alignItems: "center",
-//           gap: "1rem",
-//           cursor: "pointer",
-//         }}
-//       >
-//         {/* Aloqabank Logo */}
-//         <div
-//           style={{
-//             height: "32px",
-//             display: "flex",
-//             alignItems: "center",
-//             justifyContent: "center",
-//             // White pill background so the logo is always visible on dark navbar
-//             background: dark ? "rgba(255,255,255,0.12)" : "transparent",
-//             borderRadius: "6px",
-//             padding: dark ? "3px 8px" : "0",
-//             transition: "background 0.2s",
-//           }}
-//         >
-//           <img
-//             src="/logos/aloqabank3.png"
-//             alt="Aloqabank"
-//             style={{
-//               height: "26px",
-//               width: "auto",
-//               objectFit: "contain",
-//               display: "block",
-//             }}
-//           />
-//         </div>
-
-//         {/* Divider */}
-//         <div
-//           style={{
-//             width: 1,
-//             height: 30,
-//             background: dark ? "rgba(255,255,255,.2)" : COLORS.border,
-//             flexShrink: 0,
-//           }}
-//         />
-
-//         {/* IT Klaster Logo */}
-//         <img
-//           src="/logos/IT-klaster.svg"
-//           alt="IT Klaster"
-//           style={{
-//             height: "32px",
-//             width: "auto",
-//             objectFit: "contain",
-//             filter: dark ? "brightness(0) invert(1)" : "none",
-//             display: "block",
-//           }}
-//         />
-//       </div>
-
-//       {/* Back button */}
-//       <button
-//         onClick={onHome}
-//         style={{
-//           ...css.btn,
-//           background: dark ? "transparent" : COLORS.surface,
-//           color: dark ? "#fff" : COLORS.navy,
-//           border: dark
-//             ? "1px solid rgba(255,255,255,.3)"
-//             : `1px solid ${COLORS.border}`,
-//           fontSize: "12px",
-//           padding: ".4rem .9rem",
-//         }}
-//       >
-//         ← Orqaga
-//       </button>
-//     </nav>
-//   );
-// }
 
 function Navbar({ onHome, dark = true }) {
   return (
@@ -706,52 +470,37 @@ function Section({ title, icon, children }) {
 function LessonsPage({ stageId, onBack }) {
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    fetch(`${API_BASE}/lessons/?group=${stageId}`).then(r => r.json()).then(d => { setLessons(Array.isArray(d.results) ? d.results : d); setLoading(false); }).catch(() => setLoading(false));
+    fetch(`${API_BASE}/lessons/?group=${stageId}`)
+      .then(r => r.json())
+      .then(d => { setLessons(Array.isArray(d.results) ? d.results : d); setLoading(false); })
+      .catch(() => setLoading(false));
   }, [stageId]);
-
-  if (selected) {
-    return (
-      <div style={css.pageLight}>
-        <Navbar onHome={() => setSelected(null)} dark={false} />
-        <div className="section-pad" style={{ maxWidth: "760px", margin: "0 auto", padding: "2.5rem 1.5rem", animation: "fadeIn .3s ease" }}>
-          <button onClick={() => setSelected(null)} style={{ ...css.btn, background: COLORS.surface, color: COLORS.navy, border: `1px solid ${COLORS.border}`, marginBottom: "1.25rem" }}>← Orqaga</button>
-          <h1 style={{ margin: "0 0 .4rem", fontSize: "20px", color: COLORS.navy }}>{selected.title}</h1>
-          <p style={{ margin: "0 0 1.25rem", color: COLORS.muted, fontFamily: "sans-serif", fontSize: "13px" }}>{selected.created_at ? new Date(selected.created_at).toLocaleDateString("uz-UZ") : ""}</p>
-          <p style={{ lineHeight: 1.8, color: COLORS.navy, marginBottom: "1.5rem", fontFamily: "sans-serif", fontSize: "14px" }}>{selected.description}</p>
-          {selected.images?.length > 0 && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))", gap: ".65rem" }}>
-              {selected.images.map(img => <img key={img.id} src={fixImg(img.image)} alt="" loading="lazy" style={{ width: "100%", borderRadius: "10px", objectFit: "cover", aspectRatio: "4/3" }} />)}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div style={css.pageLight}>
       <Navbar onHome={onBack} dark={false} />
-      <div className="section-pad" style={{ maxWidth: "820px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
-        <p style={{ ...css.sectionTitle, color: COLORS.blue }}>{stageId}-bosqich</p>
-        <h1 style={{ margin: "0 0 1.5rem", fontSize: "24px", fontWeight: "bold", color: COLORS.navy }}>📸 Dars jarayonidan lavhalar</h1>
+      <div style={{ maxWidth: "480px", margin: "0 auto", padding: "1.5rem 1rem 3rem" }}>
+        <div style={{ marginBottom: "1.5rem" }}>
+          <p style={{ ...css.sectionTitle, color: COLORS.blue }}>{stageId}-bosqich</p>
+          <h1 style={{ margin: 0, fontSize: "22px", fontWeight: "bold", color: COLORS.navy }}>
+            Dars jarayonidan lavhalar
+          </h1>
+        </div>
+
         {loading ? (
-          <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}><Spinner dark /></div>
+          <div style={{ display: "flex", justifyContent: "center", padding: "4rem" }}>
+            <Spinner dark />
+          </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: ".9rem" }}>
-            {lessons.map(l => (
-              <div key={l.id} className="lesson-card" onClick={() => setSelected(l)} style={{ background: COLORS.white, border: `1px solid ${COLORS.border}`, borderRadius: "12px", overflow: "hidden", cursor: "pointer", transition: "box-shadow .2s,transform .2s" }}>
-                {l.images?.[0] ? <img src={fixImg(l.images[0].image)} alt="" loading="lazy" style={{ width: "100%", height: "140px", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "90px", background: `linear-gradient(135deg,${COLORS.navyMid},${COLORS.blue})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px" }}>📸</div>}
-                <div style={{ padding: ".85rem" }}>
-                  <div style={{ fontWeight: "bold", fontSize: "14px", color: COLORS.navy, marginBottom: "3px" }}>{l.title}</div>
-                  <div style={{ fontSize: "12px", color: COLORS.muted, fontFamily: "sans-serif", lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{l.description}</div>
-                  {l.images?.length > 0 && <div style={{ marginTop: "7px", fontSize: "11px", color: COLORS.blue, fontFamily: "sans-serif" }}>🖼 {l.images.length} ta rasm</div>}
-                </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+            {lessons.map(l => <PostCard key={l.id} lesson={l} />)}
+            {lessons.length === 0 && (
+              <div style={{ textAlign: "center", padding: "3rem", color: COLORS.muted, fontFamily: "sans-serif" }}>
+                Lavhalar topilmadi
               </div>
-            ))}
-            {lessons.length === 0 && <p style={{ color: COLORS.muted, fontFamily: "sans-serif" }}>Lavhalar topilmadi</p>}
+            )}
           </div>
         )}
       </div>
@@ -759,7 +508,164 @@ function LessonsPage({ stageId, onBack }) {
   );
 }
 
+function PostCard({ lesson }) {
+  const [currentImg, setCurrentImg] = useState(0);
+  const imgs = lesson.images || [];
+
+  return (
+    <div style={{ background: COLORS.white, border: `1px solid ${COLORS.border}`, borderRadius: "12px", overflow: "hidden" }}>
+
+      {/* Image carousel */}
+      {imgs.length > 0 ? (
+        <div style={{ position: "relative", background: "#000" }}>
+          <img
+            src={fixImg(imgs[currentImg]?.image)}
+            alt=""
+            style={{ width: "100%", aspectRatio: "4/5", objectFit: "cover", display: "block" }}
+          />
+
+          {imgs.length > 1 && (
+            <>
+              {/* Invisible tap zones for prev/next */}
+              {currentImg > 0 && (
+                <div
+                  onClick={() => setCurrentImg(i => i - 1)}
+                  style={{ position: "absolute", left: 0, top: 0, width: "35%", height: "100%", cursor: "pointer" }}
+                />
+              )}
+              {currentImg < imgs.length - 1 && (
+                <div
+                  onClick={() => setCurrentImg(i => i + 1)}
+                  style={{ position: "absolute", right: 0, top: 0, width: "35%", height: "100%", cursor: "pointer" }}
+                />
+              )}
+
+              {/* Dot indicators */}
+              <div style={{
+                position: "absolute", bottom: "10px", left: "50%", transform: "translateX(-50%)",
+                display: "flex", gap: "5px", alignItems: "center",
+              }}>
+                {imgs.map((_, i) => (
+                  <div
+                    key={i}
+                    onClick={() => setCurrentImg(i)}
+                    style={{
+                      width: i === currentImg ? 18 : 6,
+                      height: 6,
+                      borderRadius: "99px",
+                      background: i === currentImg ? "#fff" : "rgba(255,255,255,0.5)",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      flexShrink: 0,
+                    }}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      ) : (
+        <div style={{ width: "100%", aspectRatio: "4/5", background: `linear-gradient(135deg,${COLORS.navyMid},${COLORS.blue})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "48px" }}>
+          📸
+        </div>
+      )}
+
+      {/* Caption */}
+      <div style={{ padding: "12px 14px 16px" }}>
+        <h2 style={{ margin: "0 0 5px", fontSize: "18px", fontFamily: "sans-serif", color: COLORS.navy, fontWeight: "bold", lineHeight: 1.4 }}>
+          {lesson.lesson_number}-dars
+        </h2>
+        {/* <p style={{ margin: "0 0 5px", fontSize: "14px", fontFamily: "sans-serif", color: COLORS.navy, fontWeight: "bold", lineHeight: 1.4 }}>
+          {lesson.lesson_name}
+        </p> */}
+        <p style={{ margin: "0 0 8px", fontSize: "13px", fontFamily: "sans-serif", color: COLORS.navy, lineHeight: 1.6 }}>
+          {lesson.highlight_text}
+        </p>
+        <p style={{ margin: 0, fontSize: "11px", fontFamily: "sans-serif", color: COLORS.muted }}>
+          {lesson.created_at
+            ? new Date(lesson.created_at).toLocaleDateString("uz-UZ", { day: "numeric", month: "long", year: "numeric" })
+            : ""}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+
 // ─── MARKS ────────────────────────────────────────────────────────────────────
+// function MarksPage({ stageId, onBack }) {
+//   const [marks, setMarks] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [sortBy, setSortBy] = useState("created_at");
+//   const [filterSubject, setFilterSubject] = useState("");
+
+//   useEffect(() => {
+//     fetch(`${API_BASE}/marks/${stageId}/`).then(r => r.json()).then(d => { setMarks(Array.isArray(d.results) ? d.results : Array.isArray(d) ? d : []); setLoading(false); }).catch(() => setLoading(false));
+//   }, [stageId]);
+
+//   const subjects = [...new Set(marks.map(m => m.subject).filter(Boolean))];
+//   const filtered = marks.filter(m => !filterSubject || m.subject === filterSubject);
+//   const sorted = [...filtered].sort((a, b) => sortBy === "score" ? (b.score || 0) - (a.score || 0) : new Date(b.created_at) - new Date(a.created_at));
+//   const scoreColor = s => s >= 85 ? COLORS.success : s >= 70 ? COLORS.gold : COLORS.danger;
+
+//   return (
+//     <div style={css.pageLight}>
+//       <Navbar onHome={onBack} dark={false} />
+//       <div className="section-pad" style={{ maxWidth: "820px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
+//         <p style={{ ...css.sectionTitle, color: COLORS.blue }}>{stageId}-bosqich</p>
+//         <h1 style={{ margin: "0 0 1.25rem", fontSize: "24px", fontWeight: "bold", color: COLORS.navy }}>📊 Studentlar baholari</h1>
+//         <div style={{ display: "flex", gap: ".65rem", marginBottom: "1.25rem", flexWrap: "wrap" }}>
+//           <select value={filterSubject} onChange={e => setFilterSubject(e.target.value)} style={{ ...css.input, width: "auto", minWidth: "160px" }}>
+//             <option value="">Barcha fanlar</option>
+//             {subjects.map(s => <option key={s} value={s}>{s}</option>)}
+//           </select>
+//           <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={{ ...css.input, width: "auto", minWidth: "150px" }}>
+//             <option value="created_at">Sanasi bo'yicha</option>
+//             <option value="score">Baho bo'yicha</option>
+//           </select>
+//         </div>
+//         {loading ? (
+//           <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}><Spinner dark /></div>
+//         ) : (
+//           <>
+//             <div style={{ overflowX: "auto" }}>
+//               <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "sans-serif", fontSize: "13px" }}>
+//                 <thead>
+//                   <tr style={{ background: COLORS.navy }}>
+//                     {["Talaba", "Fan", "Baho", "Sana"].map((h, i) => <th key={h} className={i === 3 ? "marks-last" : ""} style={{ padding: ".75rem .9rem", textAlign: "left", color: "#fff", fontWeight: 600, whiteSpace: "nowrap" }}>{h}</th>)}
+//                   </tr>
+//                 </thead>
+//                 <tbody>
+//                   {sorted.map((m, i) => (
+//                     <tr key={m.id} style={{ background: i % 2 === 0 ? COLORS.white : COLORS.surface }}>
+//                       <td style={{ padding: ".65rem .9rem", color: COLORS.navy }}>{m.student ? `${m.student.first_name || ""} ${m.student.last_name || ""}`.trim() || "—" : "—"}</td>
+//                       <td style={{ padding: ".65rem .9rem", color: COLORS.muted }}>{m.subject || "—"}</td>
+//                       <td style={{ padding: ".65rem .9rem" }}><span style={{ display: "inline-block", padding: "2px 9px", borderRadius: "99px", fontWeight: 700, fontSize: "12px", background: `${scoreColor(m.score)}18`, color: scoreColor(m.score), border: `1px solid ${scoreColor(m.score)}44` }}>{m.score ?? "—"}</span></td>
+//                       <td className="marks-last" style={{ padding: ".65rem .9rem", color: COLORS.muted, whiteSpace: "nowrap" }}>{m.created_at ? new Date(m.created_at).toLocaleDateString("uz-UZ") : "—"}</td>
+//                     </tr>
+//                   ))}
+//                   {sorted.length === 0 && <tr><td colSpan={4} style={{ padding: "2rem", textAlign: "center", color: COLORS.muted }}>Ma'lumot topilmadi</td></tr>}
+//                 </tbody>
+//               </table>
+//             </div>
+//             {sorted.length > 0 && (
+//               <div className="summary-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: ".65rem", marginTop: "1.25rem" }}>
+//                 {[{ label: "Jami baholar", val: sorted.length }, { label: "O'rtacha baho", val: (sorted.reduce((a, m) => a + (m.score || 0), 0) / sorted.length).toFixed(1) }, { label: "Eng yuqori", val: Math.max(...sorted.map(m => m.score || 0)) }].map(item => (
+//                   <div key={item.label} style={{ background: COLORS.surface, borderRadius: "10px", padding: ".75rem", border: `1px solid ${COLORS.border}`, textAlign: "center" }}>
+//                     <div style={{ fontSize: "10px", color: COLORS.muted, fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: ".08em" }}>{item.label}</div>
+//                     <div style={{ marginTop: "5px", fontSize: "20px", fontWeight: "bold", color: COLORS.navy, fontFamily: "Georgia,serif" }}>{item.val}</div>
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
+//           </>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+
 function MarksPage({ stageId, onBack }) {
   const [marks, setMarks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -767,21 +673,52 @@ function MarksPage({ stageId, onBack }) {
   const [filterSubject, setFilterSubject] = useState("");
 
   useEffect(() => {
-    fetch(`${API_BASE}/marks/${stageId}/`).then(r => r.json()).then(d => { setMarks(Array.isArray(d.results) ? d.results : Array.isArray(d) ? d : []); setLoading(false); }).catch(() => setLoading(false));
+    fetch(`${API_BASE}/marks/${stageId}/`)
+      .then(r => r.json())
+      .then(d => {
+        setMarks(Array.isArray(d.results) ? d.results : Array.isArray(d) ? d : []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, [stageId]);
 
   const subjects = [...new Set(marks.map(m => m.subject).filter(Boolean))];
   const filtered = marks.filter(m => !filterSubject || m.subject === filterSubject);
-  const sorted = [...filtered].sort((a, b) => sortBy === "score" ? (b.score || 0) - (a.score || 0) : new Date(b.created_at) - new Date(a.created_at));
+  const sorted = [...filtered].sort((a, b) =>
+    sortBy === "score"
+      ? (b.score || 0) - (a.score || 0)
+      : new Date(b.created_at) - new Date(a.created_at)
+  );
   const scoreColor = s => s >= 85 ? COLORS.success : s >= 70 ? COLORS.gold : COLORS.danger;
+
+  // ✅ Excel download using SheetJS (add to index.html: <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>)
+  const downloadExcel = () => {
+    const headers = ["Talaba", "Fan", "Mavzu", "Baho", "Sana"];
+    const rows = sorted.map(m => ([
+      m.student ? `${m.student.first_name || ""} ${m.student.last_name || ""}`.trim() || "—" : "—",
+      m.subject || "—",
+      m.theme || "—",          // ✅ new field
+      m.score ?? "—",
+      m.created_at ? new Date(m.created_at).toLocaleDateString("uz-UZ") : "—",
+    ]));
+
+    const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+    ws["!cols"] = [20, 16, 22, 8, 14].map(w => ({ wch: w }));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Baholar");
+    XLSX.writeFile(wb, `${stageId}-bosqich_baholar.xlsx`);
+  };
 
   return (
     <div style={css.pageLight}>
       <Navbar onHome={onBack} dark={false} />
-      <div className="section-pad" style={{ maxWidth: "820px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
+      <div className="section-pad" style={{ maxWidth: "900px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
         <p style={{ ...css.sectionTitle, color: COLORS.blue }}>{stageId}-bosqich</p>
-        <h1 style={{ margin: "0 0 1.25rem", fontSize: "24px", fontWeight: "bold", color: COLORS.navy }}>📊 Studentlar baholari</h1>
-        <div style={{ display: "flex", gap: ".65rem", marginBottom: "1.25rem", flexWrap: "wrap" }}>
+        <h1 style={{ margin: "0 0 1.25rem", fontSize: "24px", fontWeight: "bold", color: COLORS.navy }}>
+          📊 Studentlar baholari
+        </h1>
+
+        <div style={{ display: "flex", gap: ".65rem", marginBottom: "1.25rem", flexWrap: "wrap", alignItems: "center" }}>
           <select value={filterSubject} onChange={e => setFilterSubject(e.target.value)} style={{ ...css.input, width: "auto", minWidth: "160px" }}>
             <option value="">Barcha fanlar</option>
             {subjects.map(s => <option key={s} value={s}>{s}</option>)}
@@ -790,7 +727,25 @@ function MarksPage({ stageId, onBack }) {
             <option value="created_at">Sanasi bo'yicha</option>
             <option value="score">Baho bo'yicha</option>
           </select>
+
+          {/* ✅ Excel download button */}
+          {sorted.length > 0 && (
+            <button
+              onClick={downloadExcel}
+              style={{
+                marginLeft: "auto",
+                display: "flex", alignItems: "center", gap: ".4rem",
+                background: COLORS.success, color: "#fff",
+                border: "none", borderRadius: "8px",
+                padding: ".45rem 1rem", fontSize: "13px", fontWeight: 600,
+                cursor: "pointer", fontFamily: "sans-serif",
+              }}
+            >
+              ⬇ Excel yuklab olish
+            </button>
+          )}
         </div>
+
         {loading ? (
           <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}><Spinner dark /></div>
         ) : (
@@ -799,25 +754,47 @@ function MarksPage({ stageId, onBack }) {
               <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "sans-serif", fontSize: "13px" }}>
                 <thead>
                   <tr style={{ background: COLORS.navy }}>
-                    {["Talaba", "Fan", "Baho", "Sana"].map((h, i) => <th key={h} className={i === 3 ? "marks-last" : ""} style={{ padding: ".75rem .9rem", textAlign: "left", color: "#fff", fontWeight: 600, whiteSpace: "nowrap" }}>{h}</th>)}
+                    {/* ✅ Added "Mavzu" column */}
+                    {["Talaba", "Fan", "Mavzu", "Baho", "Sana"].map((h, i) => (
+                      <th key={h} style={{ padding: ".75rem .9rem", textAlign: "left", color: "#fff", fontWeight: 600, whiteSpace: "nowrap" }}>
+                        {h}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
                   {sorted.map((m, i) => (
                     <tr key={m.id} style={{ background: i % 2 === 0 ? COLORS.white : COLORS.surface }}>
-                      <td style={{ padding: ".65rem .9rem", color: COLORS.navy }}>{m.student ? `${m.student.first_name || ""} ${m.student.last_name || ""}`.trim() || "—" : "—"}</td>
+                      <td style={{ padding: ".65rem .9rem", color: COLORS.navy }}>
+                        {m.student ? `${m.student.first_name || ""} ${m.student.last_name || ""}`.trim() || "—" : "—"}
+                      </td>
                       <td style={{ padding: ".65rem .9rem", color: COLORS.muted }}>{m.subject || "—"}</td>
-                      <td style={{ padding: ".65rem .9rem" }}><span style={{ display: "inline-block", padding: "2px 9px", borderRadius: "99px", fontWeight: 700, fontSize: "12px", background: `${scoreColor(m.score)}18`, color: scoreColor(m.score), border: `1px solid ${scoreColor(m.score)}44` }}>{m.score ?? "—"}</span></td>
-                      <td className="marks-last" style={{ padding: ".65rem .9rem", color: COLORS.muted, whiteSpace: "nowrap" }}>{m.created_at ? new Date(m.created_at).toLocaleDateString("uz-UZ") : "—"}</td>
+                      {/* ✅ New theme cell */}
+                      <td style={{ padding: ".65rem .9rem", color: COLORS.muted }}>{m.theme || "—"}</td>
+                      <td style={{ padding: ".65rem .9rem" }}>
+                        <span style={{ display: "inline-block", padding: "2px 9px", borderRadius: "99px", fontWeight: 700, fontSize: "12px", background: `${scoreColor(m.score)}18`, color: scoreColor(m.score), border: `1px solid ${scoreColor(m.score)}44` }}>
+                          {m.score ?? "—"}
+                        </span>
+                      </td>
+                      <td style={{ padding: ".65rem .9rem", color: COLORS.muted, whiteSpace: "nowrap" }}>
+                        {m.created_at ? new Date(m.created_at).toLocaleDateString("uz-UZ") : "—"}
+                      </td>
                     </tr>
                   ))}
-                  {sorted.length === 0 && <tr><td colSpan={4} style={{ padding: "2rem", textAlign: "center", color: COLORS.muted }}>Ma'lumot topilmadi</td></tr>}
+                  {sorted.length === 0 && (
+                    <tr><td colSpan={5} style={{ padding: "2rem", textAlign: "center", color: COLORS.muted }}>Ma'lumot topilmadi</td></tr>
+                  )}
                 </tbody>
               </table>
             </div>
+
             {sorted.length > 0 && (
               <div className="summary-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: ".65rem", marginTop: "1.25rem" }}>
-                {[{ label: "Jami baholar", val: sorted.length }, { label: "O'rtacha baho", val: (sorted.reduce((a, m) => a + (m.score || 0), 0) / sorted.length).toFixed(1) }, { label: "Eng yuqori", val: Math.max(...sorted.map(m => m.score || 0)) }].map(item => (
+                {[
+                  { label: "Jami baholar", val: sorted.length },
+                  { label: "O'rtacha baho", val: (sorted.reduce((a, m) => a + (m.score || 0), 0) / sorted.length).toFixed(1) },
+                  { label: "Eng yuqori", val: Math.max(...sorted.map(m => m.score || 0)) },
+                ].map(item => (
                   <div key={item.label} style={{ background: COLORS.surface, borderRadius: "10px", padding: ".75rem", border: `1px solid ${COLORS.border}`, textAlign: "center" }}>
                     <div style={{ fontSize: "10px", color: COLORS.muted, fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: ".08em" }}>{item.label}</div>
                     <div style={{ marginTop: "5px", fontSize: "20px", fontWeight: "bold", color: COLORS.navy, fontFamily: "Georgia,serif" }}>{item.val}</div>
@@ -831,6 +808,8 @@ function MarksPage({ stageId, onBack }) {
     </div>
   );
 }
+
+
 
 // ─── ROOT ─────────────────────────────────────────────────────────────────────
 export default function App() {
