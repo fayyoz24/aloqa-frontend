@@ -673,7 +673,7 @@ function MarksPage({ stageId, onBack }) {
   const [filterSubject, setFilterSubject] = useState("");
 
   useEffect(() => {
-    fetch(`${API_BASE}/marks/${stageId}/`)
+    fetch(`${API_BASE}/marks/bosqich/${stageId}/`)
       .then(r => r.json())
       .then(d => {
         setMarks(Array.isArray(d.results) ? d.results : Array.isArray(d) ? d : []);
