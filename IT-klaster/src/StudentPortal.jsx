@@ -666,6 +666,150 @@ function PostCard({ lesson }) {
 // }
 
 
+// function MarksPage({ stageId, onBack }) {
+//   const [marks, setMarks] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [sortBy, setSortBy] = useState("created_at");
+//   const [filterSubject, setFilterSubject] = useState("");
+
+//   useEffect(() => {
+//     fetch(`${API_BASE}/marks/bosqich/${stageId}/`)
+//       .then(r => r.json())
+//       .then(d => {
+//         setMarks(Array.isArray(d.results) ? d.results : Array.isArray(d) ? d : []);
+//         setLoading(false);
+//       })
+//       .catch(() => setLoading(false));
+//   }, [stageId]);
+
+//   const subjects = [...new Set(marks.map(m => m.subject).filter(Boolean))];
+//   const filtered = marks.filter(m => !filterSubject || m.subject === filterSubject);
+//   const sorted = [...filtered].sort((a, b) =>
+//     sortBy === "score"
+//       ? (b.score || 0) - (a.score || 0)
+//       : new Date(b.created_at) - new Date(a.created_at)
+//   );
+//   const scoreColor = s => s >= 85 ? COLORS.success : s >= 70 ? COLORS.gold : COLORS.danger;
+
+//   // ✅ Excel download using SheetJS (add to index.html: <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>)
+//   const downloadExcel = () => {
+//     const headers = ["Talaba", "Fan", "Mavzu", "Baho", "Sana"];
+//     const rows = sorted.map(m => ([
+//       m.student ? `${m.student.first_name || ""} ${m.student.last_name || ""}`.trim() || "—" : "—",
+//       m.subject || "—",
+//       m.theme || "—",          // ✅ new field
+//       m.score ?? "—",
+//       m.created_at ? new Date(m.created_at).toLocaleDateString("uz-UZ") : "—",
+//     ]));
+
+//     const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+//     ws["!cols"] = [20, 16, 22, 8, 14].map(w => ({ wch: w }));
+//     const wb = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(wb, ws, "Baholar");
+//     XLSX.writeFile(wb, `${stageId}-bosqich_baholar.xlsx`);
+//   };
+
+//   return (
+//     <div style={css.pageLight}>
+//       <Navbar onHome={onBack} dark={false} />
+//       <div className="section-pad" style={{ maxWidth: "900px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
+//         <p style={{ ...css.sectionTitle, color: COLORS.blue }}>{stageId}-bosqich</p>
+//         <h1 style={{ margin: "0 0 1.25rem", fontSize: "24px", fontWeight: "bold", color: COLORS.navy }}>
+//           📊 Studentlar baholari
+//         </h1>
+
+//         <div style={{ display: "flex", gap: ".65rem", marginBottom: "1.25rem", flexWrap: "wrap", alignItems: "center" }}>
+//           <select value={filterSubject} onChange={e => setFilterSubject(e.target.value)} style={{ ...css.input, width: "auto", minWidth: "160px" }}>
+//             <option value="">Barcha fanlar</option>
+//             {subjects.map(s => <option key={s} value={s}>{s}</option>)}
+//           </select>
+//           <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={{ ...css.input, width: "auto", minWidth: "150px" }}>
+//             <option value="created_at">Sanasi bo'yicha</option>
+//             <option value="score">Baho bo'yicha</option>
+//           </select>
+
+//           {/* ✅ Excel download button */}
+//           {sorted.length > 0 && (
+//             <button
+//               onClick={downloadExcel}
+//               style={{
+//                 marginLeft: "auto",
+//                 display: "flex", alignItems: "center", gap: ".4rem",
+//                 background: COLORS.success, color: "#fff",
+//                 border: "none", borderRadius: "8px",
+//                 padding: ".45rem 1rem", fontSize: "13px", fontWeight: 600,
+//                 cursor: "pointer", fontFamily: "sans-serif",
+//               }}
+//             >
+//               ⬇ Excel yuklab olish
+//             </button>
+//           )}
+//         </div>
+
+//         {loading ? (
+//           <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}><Spinner dark /></div>
+//         ) : (
+//           <>
+//             <div style={{ overflowX: "auto" }}>
+//               <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "sans-serif", fontSize: "13px" }}>
+//                 <thead>
+//                   <tr style={{ background: COLORS.navy }}>
+//                     {/* ✅ Added "Mavzu" column */}
+//                     {["Talaba", "Fan", "Mavzu", "Baho", "Sana"].map((h, i) => (
+//                       <th key={h} style={{ padding: ".75rem .9rem", textAlign: "left", color: "#fff", fontWeight: 600, whiteSpace: "nowrap" }}>
+//                         {h}
+//                       </th>
+//                     ))}
+//                   </tr>
+//                 </thead>
+//                 <tbody>
+//                   {sorted.map((m, i) => (
+//                     <tr key={m.id} style={{ background: i % 2 === 0 ? COLORS.white : COLORS.surface }}>
+//                       <td style={{ padding: ".65rem .9rem", color: COLORS.navy }}>
+//                         {m.student ? `${m.student.first_name || ""} ${m.student.last_name || ""}`.trim() || "—" : "—"}
+//                       </td>
+//                       <td style={{ padding: ".65rem .9rem", color: COLORS.muted }}>{m.subject || "—"}</td>
+//                       {/* ✅ New theme cell */}
+//                       <td style={{ padding: ".65rem .9rem", color: COLORS.muted }}>{m.theme || "—"}</td>
+//                       <td style={{ padding: ".65rem .9rem" }}>
+//                         <span style={{ display: "inline-block", padding: "2px 9px", borderRadius: "99px", fontWeight: 700, fontSize: "12px", background: `${scoreColor(m.score)}18`, color: scoreColor(m.score), border: `1px solid ${scoreColor(m.score)}44` }}>
+//                           {m.score ?? "—"}
+//                         </span>
+//                       </td>
+//                       <td style={{ padding: ".65rem .9rem", color: COLORS.muted, whiteSpace: "nowrap" }}>
+//                         {m.created_at ? new Date(m.created_at).toLocaleDateString("uz-UZ") : "—"}
+//                       </td>
+//                     </tr>
+//                   ))}
+//                   {sorted.length === 0 && (
+//                     <tr><td colSpan={5} style={{ padding: "2rem", textAlign: "center", color: COLORS.muted }}>Ma'lumot topilmadi</td></tr>
+//                   )}
+//                 </tbody>
+//               </table>
+//             </div>
+
+//             {sorted.length > 0 && (
+//               <div className="summary-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: ".65rem", marginTop: "1.25rem" }}>
+//                 {[
+//                   { label: "Jami baholar", val: sorted.length },
+//                   { label: "O'rtacha baho", val: (sorted.reduce((a, m) => a + (m.score || 0), 0) / sorted.length).toFixed(1) },
+//                   { label: "Eng yuqori", val: Math.max(...sorted.map(m => m.score || 0)) },
+//                 ].map(item => (
+//                   <div key={item.label} style={{ background: COLORS.surface, borderRadius: "10px", padding: ".75rem", border: `1px solid ${COLORS.border}`, textAlign: "center" }}>
+//                     <div style={{ fontSize: "10px", color: COLORS.muted, fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: ".08em" }}>{item.label}</div>
+//                     <div style={{ marginTop: "5px", fontSize: "20px", fontWeight: "bold", color: COLORS.navy, fontFamily: "Georgia,serif" }}>{item.val}</div>
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
+//           </>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+// ─── MARKS ────────────────────────────────────────────────────────────────────
 function MarksPage({ stageId, onBack }) {
   const [marks, setMarks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -689,100 +833,231 @@ function MarksPage({ stageId, onBack }) {
       ? (b.score || 0) - (a.score || 0)
       : new Date(b.created_at) - new Date(a.created_at)
   );
+
+  // Group rows by date ─────────────────────────────────────────────────────────
+  const groupedByDate = [];
+  let currentDate = null;
+  sorted.forEach(m => {
+    const dateStr = m.created_at
+      ? new Date(m.created_at).toLocaleDateString("uz-UZ")
+      : "—";
+    if (dateStr !== currentDate) {
+      currentDate = dateStr;
+      groupedByDate.push({ type: "dateHeader", date: dateStr });
+    }
+    groupedByDate.push({ type: "row", data: m });
+  });
+
+  // Deduplicate student names within each date group ────────────────────────────
+  const seenPerDate = {};
+  const rows = groupedByDate.map(item => {
+    if (item.type === "dateHeader") { seenPerDate[item.date] = new Set(); return item; }
+    const m = item.data;
+    const dateStr = m.created_at ? new Date(m.created_at).toLocaleDateString("uz-UZ") : "—";
+    const studentName = m.student
+      ? `${m.student.first_name || ""} ${m.student.last_name || ""}`.trim() || "—"
+      : "—";
+    const isDuplicate = seenPerDate[dateStr]?.has(studentName);
+    if (!isDuplicate) seenPerDate[dateStr]?.add(studentName);
+    return { ...item, studentName, isDuplicate };
+  });
+
+  // Score colour ────────────────────────────────────────────────────────────────
   const scoreColor = s => s >= 85 ? COLORS.success : s >= 70 ? COLORS.gold : COLORS.danger;
 
-  // ✅ Excel download using SheetJS (add to index.html: <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>)
-  const downloadExcel = () => {
-    const headers = ["Talaba", "Fan", "Mavzu", "Baho", "Sana"];
-    const rows = sorted.map(m => ([
-      m.student ? `${m.student.first_name || ""} ${m.student.last_name || ""}`.trim() || "—" : "—",
-      m.subject || "—",
-      m.theme || "—",          // ✅ new field
-      m.score ?? "—",
-      m.created_at ? new Date(m.created_at).toLocaleDateString("uz-UZ") : "—",
-    ]));
+  // Excel export via SheetJS ────────────────────────────────────────────────────
+  const exportExcel = () => {
+    import("https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.mjs").then(XLSX => {
 
-    const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-    ws["!cols"] = [20, 16, 22, 8, 14].map(w => ({ wch: w }));
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Baholar");
-    XLSX.writeFile(wb, `${stageId}-bosqich_baholar.xlsx`);
+      // 1. Collect all unique students (preserve order from sorted list)
+      const studentMap = {};   // id → { name, scores: { dateStr: score } }
+      const studentOrder = []; // preserve insertion order
+      const dateSet = new Set();
+
+      sorted.forEach(m => {
+        if (!m.student) return;
+        const id = m.student.id;
+        const name = `${m.student.first_name || ""} ${m.student.last_name || ""}`.trim() || "—";
+        const dateStr = m.created_at
+          ? new Date(m.created_at).toLocaleDateString("uz-UZ")
+          : "—";
+
+        dateSet.add(dateStr);
+
+        if (!studentMap[id]) {
+          studentMap[id] = { name, scores: {} };
+          studentOrder.push(id);
+        }
+        // If a student has multiple marks on the same date, average them
+        if (studentMap[id].scores[dateStr] === undefined) {
+          studentMap[id].scores[dateStr] = { sum: m.score || 0, count: 1 };
+        } else {
+          studentMap[id].scores[dateStr].sum += m.score || 0;
+          studentMap[id].scores[dateStr].count += 1;
+        }
+      });
+
+      // 2. Sort dates chronologically
+      const dates = [...dateSet].sort((a, b) => {
+        const parse = s => s.split(".").reverse().join("-"); // DD.MM.YYYY → YYYY-MM-DD
+        return new Date(parse(a)) - new Date(parse(b));
+      });
+
+      // 3. Build rows: [ studentName, score1, score2, ..., overallAvg ]
+      const header = ["Talaba", ...dates, "O'rtacha Baho"];
+      const dataRows = studentOrder.map(id => {
+        const { name, scores } = studentMap[id];
+        const scoreCells = dates.map(d => {
+          const entry = scores[d];
+          return entry ? parseFloat((entry.sum / entry.count).toFixed(1)) : "";
+        });
+        const allScores = Object.values(scores);
+        const totalSum   = allScores.reduce((a, e) => a + e.sum, 0);
+        const totalCount = allScores.reduce((a, e) => a + e.count, 0);
+        const avg = totalCount ? parseFloat((totalSum / totalCount).toFixed(1)) : "";
+        return [name, ...scoreCells, avg];
+      });
+
+      // 4. Assemble sheet
+      const ws = XLSX.utils.aoa_to_sheet([header, ...dataRows]);
+
+      // 5. Column widths
+      ws["!cols"] = [
+        { wch: 26 },                              // Talaba
+        ...dates.map(() => ({ wch: 14 })),        // date columns
+        { wch: 16 },                              // O'rtacha Baho
+      ];
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, `${stageId}-bosqich baholari`);
+      XLSX.writeFile(wb, `marks_stage${stageId}.xlsx`);
+    });
   };
+
 
   return (
     <div style={css.pageLight}>
       <Navbar onHome={onBack} dark={false} />
-      <div className="section-pad" style={{ maxWidth: "900px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
+      <div className="section-pad" style={{ maxWidth: "880px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
         <p style={{ ...css.sectionTitle, color: COLORS.blue }}>{stageId}-bosqich</p>
         <h1 style={{ margin: "0 0 1.25rem", fontSize: "24px", fontWeight: "bold", color: COLORS.navy }}>
           📊 Studentlar baholari
         </h1>
 
         <div style={{ display: "flex", gap: ".65rem", marginBottom: "1.25rem", flexWrap: "wrap", alignItems: "center" }}>
-          <select value={filterSubject} onChange={e => setFilterSubject(e.target.value)} style={{ ...css.input, width: "auto", minWidth: "160px" }}>
+          <select
+            value={filterSubject}
+            onChange={e => setFilterSubject(e.target.value)}
+            style={{ ...css.input, width: "auto", minWidth: "160px" }}
+          >
             <option value="">Barcha fanlar</option>
             {subjects.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
-          <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={{ ...css.input, width: "auto", minWidth: "150px" }}>
+          <select
+            value={sortBy}
+            onChange={e => setSortBy(e.target.value)}
+            style={{ ...css.input, width: "auto", minWidth: "150px" }}
+          >
             <option value="created_at">Sanasi bo'yicha</option>
             <option value="score">Baho bo'yicha</option>
           </select>
-
-          {/* ✅ Excel download button */}
-          {sorted.length > 0 && (
-            <button
-              onClick={downloadExcel}
-              style={{
-                marginLeft: "auto",
-                display: "flex", alignItems: "center", gap: ".4rem",
-                background: COLORS.success, color: "#fff",
-                border: "none", borderRadius: "8px",
-                padding: ".45rem 1rem", fontSize: "13px", fontWeight: 600,
-                cursor: "pointer", fontFamily: "sans-serif",
-              }}
-            >
-              ⬇ Excel yuklab olish
-            </button>
-          )}
+          <button
+            onClick={exportExcel}
+            style={{
+              ...css.btn,
+              background: COLORS.success,
+              color: "#fff",
+              marginLeft: "auto",
+              fontSize: "12px",
+              padding: ".45rem 1rem",
+            }}
+          >
+            ⬇ Excel yuklab olish
+          </button>
         </div>
 
         {loading ? (
-          <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}><Spinner dark /></div>
+          <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
+            <Spinner dark />
+          </div>
         ) : (
           <>
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "sans-serif", fontSize: "13px" }}>
                 <thead>
                   <tr style={{ background: COLORS.navy }}>
-                    {/* ✅ Added "Mavzu" column */}
                     {["Talaba", "Fan", "Mavzu", "Baho", "Sana"].map((h, i) => (
-                      <th key={h} style={{ padding: ".75rem .9rem", textAlign: "left", color: "#fff", fontWeight: 600, whiteSpace: "nowrap" }}>
+                      <th
+                        key={h}
+                        className={i === 4 ? "marks-last" : ""}
+                        style={{ padding: ".75rem .9rem", textAlign: "left", color: "#fff", fontWeight: 600, whiteSpace: "nowrap" }}
+                      >
                         {h}
                       </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {sorted.map((m, i) => (
-                    <tr key={m.id} style={{ background: i % 2 === 0 ? COLORS.white : COLORS.surface }}>
-                      <td style={{ padding: ".65rem .9rem", color: COLORS.navy }}>
-                        {m.student ? `${m.student.first_name || ""} ${m.student.last_name || ""}`.trim() || "—" : "—"}
-                      </td>
-                      <td style={{ padding: ".65rem .9rem", color: COLORS.muted }}>{m.subject || "—"}</td>
-                      {/* ✅ New theme cell */}
-                      <td style={{ padding: ".65rem .9rem", color: COLORS.muted }}>{m.theme || "—"}</td>
-                      <td style={{ padding: ".65rem .9rem" }}>
-                        <span style={{ display: "inline-block", padding: "2px 9px", borderRadius: "99px", fontWeight: 700, fontSize: "12px", background: `${scoreColor(m.score)}18`, color: scoreColor(m.score), border: `1px solid ${scoreColor(m.score)}44` }}>
-                          {m.score ?? "—"}
-                        </span>
-                      </td>
-                      <td style={{ padding: ".65rem .9rem", color: COLORS.muted, whiteSpace: "nowrap" }}>
-                        {m.created_at ? new Date(m.created_at).toLocaleDateString("uz-UZ") : "—"}
+                  {rows.map((item, i) => {
+                    if (item.type === "dateHeader") {
+                      return (
+                        <tr key={`dh-${i}`}>
+                          <td
+                            colSpan={5}
+                            style={{
+                              padding: ".45rem .9rem",
+                              background: "linear-gradient(90deg,#EFF6FF,#F8FAFC)",
+                              borderTop: `2px solid ${COLORS.blue}`,
+                              borderBottom: `1px solid ${COLORS.border}`,
+                              color: COLORS.blue,
+                              fontWeight: 700,
+                              fontSize: "11px",
+                              letterSpacing: ".08em",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            📅 {item.date}
+                          </td>
+                        </tr>
+                      );
+                    }
+                    const m = item.data;
+                    return (
+                      <tr key={m.id} style={{ background: i % 2 === 0 ? COLORS.white : COLORS.surface }}>
+                        <td style={{ padding: ".6rem .9rem", color: COLORS.navy, fontWeight: item.isDuplicate ? 400 : 600 }}>
+                          {item.isDuplicate ? (
+                            <span style={{ color: COLORS.border, fontSize: "18px", lineHeight: 1 }}>↳</span>
+                          ) : (
+                            item.studentName
+                          )}
+                        </td>
+                        <td style={{ padding: ".6rem .9rem", color: COLORS.muted }}>{m.subject || "—"}</td>
+                        <td style={{ padding: ".6rem .9rem", color: COLORS.navy, maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {m.theme || <span style={{ color: COLORS.border }}>—</span>}
+                        </td>
+                        <td style={{ padding: ".6rem .9rem" }}>
+                          <span style={{
+                            display: "inline-block", padding: "2px 9px", borderRadius: "99px",
+                            fontWeight: 700, fontSize: "12px",
+                            background: `${scoreColor(m.score)}18`,
+                            color: scoreColor(m.score),
+                            border: `1px solid ${scoreColor(m.score)}44`,
+                          }}>
+                            {m.score ?? "—"}
+                          </span>
+                        </td>
+                        <td className="marks-last" style={{ padding: ".6rem .9rem", color: COLORS.muted, whiteSpace: "nowrap" }}>
+                          {m.created_at ? new Date(m.created_at).toLocaleDateString("uz-UZ") : "—"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  {rows.length === 0 && (
+                    <tr>
+                      <td colSpan={5} style={{ padding: "2rem", textAlign: "center", color: COLORS.muted }}>
+                        Ma'lumot topilmadi
                       </td>
                     </tr>
-                  ))}
-                  {sorted.length === 0 && (
-                    <tr><td colSpan={5} style={{ padding: "2rem", textAlign: "center", color: COLORS.muted }}>Ma'lumot topilmadi</td></tr>
                   )}
                 </tbody>
               </table>
@@ -808,7 +1083,6 @@ function MarksPage({ stageId, onBack }) {
     </div>
   );
 }
-
 
 
 // ─── ROOT ─────────────────────────────────────────────────────────────────────
