@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import * as XLSX from "xlsx";
 const API_BASE = "https://aloqabankstudents.pythonanywhere.com/api/students";
 const IMG_ROOT = "https://aloqabankstudents.pythonanywhere.com/media/";
+// const API_BASE = "http://127.0.0.1:8000/api/students";
+// const IMG_ROOT = "http://127.0.0.1:8000/media/";
 
 function fixImg(url) {
   if (!url) return null;
@@ -213,11 +215,18 @@ function HomePage({ onSelect }) {
 }
 
 // ─── STAGE ────────────────────────────────────────────────────────────────────
-function StagePage({ stageId, onBack, onStudents, onLessons, onMarks }) {
+// function StagePage({ stageId, onBack, onStudents, onLessons, onMarks }) {
+function StagePage({ stageId, onBack, onStudents, onLessons, onMarks, onAdmin }) {
+  // const sections = [
+  //   { key: "students", icon: "👩‍🎓", title: "Talabalar ro'yxati", desc: "Talabalar profil ma'lumotlari, GitHub, email va telefon raqamlari", accent: COLORS.blue, action: onStudents },
+  //   { key: "lessons", icon: "📸", title: "Dars jarayonidan lavhalar", desc: "Dars jarayonidagi muhim lahzalar, rasmlar va ta'riflar", accent: "#8B5CF6", action: onLessons },
+  //   { key: "marks", icon: "📊", title: "Studentlar baholari", desc: "Barcha talabalarning fanlar bo'yicha baholari", accent: COLORS.gold, action: onMarks },
+  // ];
   const sections = [
     { key: "students", icon: "👩‍🎓", title: "Talabalar ro'yxati", desc: "Talabalar profil ma'lumotlari, GitHub, email va telefon raqamlari", accent: COLORS.blue, action: onStudents },
     { key: "lessons", icon: "📸", title: "Dars jarayonidan lavhalar", desc: "Dars jarayonidagi muhim lahzalar, rasmlar va ta'riflar", accent: "#8B5CF6", action: onLessons },
     { key: "marks", icon: "📊", title: "Studentlar baholari", desc: "Barcha talabalarning fanlar bo'yicha baholari", accent: COLORS.gold, action: onMarks },
+    { key: "admin", icon: "🔐", title: "Baholar kiritish (Admin)", desc: "Admin panel: ommaviy baho kiritish jadvali", accent: COLORS.success, action: onAdmin },
   ];
   return (
     <div style={css.pageDark}>
@@ -1085,6 +1094,369 @@ function MarksPage({ stageId, onBack }) {
 }
 
 
+// ─── ADMIN LOGIN ──────────────────────────────────────────────────────────────
+function AdminLoginPage({ onLogin, onBack }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError]       = useState(null);
+  const [loading, setLoading]   = useState(false);
+
+  const handleSubmit = async () => {
+    if (!username.trim() || !password) return;
+    setError(null);
+    setLoading(true);
+    try {
+      const res  = await fetch(`${API_BASE}/admin/login/`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ username, password }),
+      });
+      const json = await res.json();
+      if (!res.ok) { setError(json.error || "Noto'g'ri ma'lumotlar"); setLoading(false); return; }
+      onLogin(json.access);
+    } catch {
+      setError("Server bilan bog'liq muammo");
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={css.pageDark}>
+      <Navbar onHome={onBack} dark />
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "calc(100vh - 60px)", padding: "1rem" }}>
+        <div style={{ background: "#fff", borderRadius: "20px", padding: "2.25rem 2rem", width: "100%", maxWidth: "380px", boxShadow: "0 40px 80px rgba(0,0,0,.35)", animation: "fadeIn .3s ease" }}>
+          <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
+            <div style={{ fontSize: "36px", marginBottom: ".5rem" }}>🔐</div>
+            <h2 style={{ margin: 0, fontSize: "20px", color: COLORS.navy, fontFamily: "Georgia,serif" }}>Admin Panel</h2>
+            <p style={{ margin: "4px 0 0", color: COLORS.muted, fontSize: "13px", fontFamily: "sans-serif" }}>Baholar kiritish paneli</p>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: ".75rem" }}>
+            <div>
+              <label style={{ ...css.sectionTitle, color: COLORS.muted, display: "block", marginBottom: "4px" }}>Foydalanuvchi nomi</label>
+              <input
+                type="text" placeholder="admin" value={username}
+                onChange={e => setUsername(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleSubmit()}
+                style={css.input} autoFocus disabled={loading}
+              />
+            </div>
+            <div>
+              <label style={{ ...css.sectionTitle, color: COLORS.muted, display: "block", marginBottom: "4px" }}>Parol</label>
+              <input
+                type="password" placeholder="••••••••" value={password}
+                onChange={e => setPassword(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleSubmit()}
+                style={css.input} disabled={loading}
+              />
+            </div>
+            {error && <p style={{ color: COLORS.danger, fontSize: "12px", fontFamily: "sans-serif", margin: 0 }}>❌ {error}</p>}
+            <button
+              onClick={handleSubmit} disabled={loading || !username || !password}
+              style={{ ...css.btn, background: loading ? COLORS.muted : COLORS.navy, color: "#fff", width: "100%", justifyContent: "center", marginTop: ".25rem", padding: ".7rem", fontSize: "14px", opacity: (!username || !password) ? .5 : 1 }}
+            >
+              {loading ? <><span style={{ width: 13, height: 13, border: "2px solid rgba(255,255,255,.4)", borderTop: "2px solid #fff", borderRadius: "50%", display: "inline-block", animation: "spin .7s linear infinite" }} /> Kirilmoqda...</> : "Kirish →"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── ADMIN MARK PAGE ──────────────────────────────────────────────────────────
+function AdminMarkPage({ stageId, token, onBack}) {
+  const today = new Date().toISOString().slice(0, 10);
+
+  const [students,  setStudents]  = useState([]);
+  const [loadingS,  setLoadingS]  = useState(true);
+  const [subject,   setSubject]   = useState("");
+  const [theme,     setTheme]     = useState("");
+  const [date,      setDate]      = useState(today);
+  const [scores,    setScores]    = useState({});   // { studentId: scoreString }
+  const [saving,    setSaving]    = useState(false);
+  const [toast,     setToast]     = useState(null);
+  const [filter,    setFilter]    = useState("");
+  const [groupFilter, setGroupFilter] = useState("");
+
+  const showToast = (msg, type = "success") => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3500);
+  };
+
+  useEffect(() => {
+    fetch(`${API_BASE}/admin/students/${stageId}/`, {
+  headers: authHeader(token)
+})
+      .then(r => r.json())
+      .then(d => { setStudents(Array.isArray(d) ? d : []); setLoadingS(false); })
+      .catch(() => setLoadingS(false));
+  }, [stageId, token]);
+
+  // const filtered = students.filter(s => {
+  //   const q = filter.toLowerCase();
+  //   return !q || `${s.first_name} ${s.last_name}`.toLowerCase().includes(q);
+  // });
+  const filtered = students.filter(s => {
+    const q = filter.toLowerCase();
+
+    const matchesSearch =
+      !q || `${s.first_name} ${s.last_name}`.toLowerCase().includes(q);
+
+    const matchesGroup =
+      !groupFilter || String(s.group) === groupFilter;
+
+    return matchesSearch && matchesGroup;
+  });
+  const setScore = (id, val) => {
+    // Allow empty, digits, one dot
+    if (val !== "" && !/^\d{0,3}(\.\d{0,1})?$/.test(val)) return;
+    setScores(prev => ({ ...prev, [id]: val }));
+  };
+
+  const filledCount = Object.values(scores).filter(v => v !== "" && v !== undefined).length;
+
+  // Quick-fill helpers
+  const fillAll  = (val) => setScores(Object.fromEntries(students.map(s => [s.id, String(val)])));
+  const clearAll = ()    => setScores({});
+
+  const handleSave = async () => {
+    if (!subject.trim())   return showToast("Fan nomini kiriting", "error");
+    if (!date)             return showToast("Sanani kiriting", "error");
+    if (filledCount === 0) return showToast("Hech bo'lmaganda bitta baho kiriting", "error");
+
+    const marksPayload = Object.entries(scores)
+      .filter(([, v]) => v !== "" && v !== undefined)
+      .map(([id, v]) => ({ student_id: Number(id), score: parseFloat(v) }));
+
+    const invalid = marksPayload.find(m => isNaN(m.score) || m.score < 0 || m.score > 5);
+    if (invalid) return showToast("Baholar 0–5 oralig'ida bo'lishi kerak", "error");
+
+    setSaving(true);
+    try {
+      const res = await fetch(`${API_BASE}/marks/bulk/`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json", ...authHeader(token) },
+        body:    JSON.stringify({ subject: subject.trim(), theme: theme.trim(), date, marks: marksPayload }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.detail || JSON.stringify(json));
+      showToast(`✓ ${json.created} ta baho saqlandi`);
+      clearAll();
+    } catch (e) {
+      showToast(e.message || "Xatolik yuz berdi", "error");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const scoreColor = v => {
+    const n = parseFloat(v);
+    if (isNaN(n) || v === "") return COLORS.border;
+    return n >= 4.1 ? COLORS.success : n >= 4 ? COLORS.gold : COLORS.danger;
+  };
+
+  return (
+    <div style={css.pageLight}>
+      <Navbar onHome={onBack} dark={false} />
+      {toast && <Toast msg={toast.msg} type={toast.type} />}
+
+      <div style={{ maxWidth: "860px", margin: "0 auto", padding: "2rem 1.25rem 4rem" }}>
+
+        {/* Header */}
+        <div style={{ marginBottom: "1.5rem" }}>
+          <p style={{ ...css.sectionTitle, color: COLORS.blue }}>{stageId}-bosqich · Admin</p>
+          <h1 style={{ margin: 0, fontSize: "24px", fontWeight: "bold", color: COLORS.navy }}>
+            📝 Baholar kiritish
+          </h1>
+          <p style={{ margin: "4px 0 0", color: COLORS.muted, fontSize: "13px", fontFamily: "sans-serif" }}>
+            Guruh uchun ommaviy baho kiritish jadvali
+          </p>
+        </div>
+
+        {/* Meta inputs */}
+        <div style={{
+          display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
+          gap: ".75rem", background: COLORS.white,
+          border: `1px solid ${COLORS.border}`, borderRadius: "14px",
+          padding: "1.25rem", marginBottom: "1.25rem",
+          boxShadow: "0 2px 12px rgba(10,22,40,.06)",
+        }}>
+          {[
+            { label: "Fan *", placeholder: "Masalan: Python", value: subject, set: setSubject, type: "text" },
+            { label: "Mavzu", placeholder: "Masalan: Django ORM", value: theme, set: setTheme, type: "text" },
+            { label: "Sana *", placeholder: "", value: date, set: setDate, type: "date" },
+          ].map(f => (
+            <div key={f.label}>
+              <label style={{ ...css.sectionTitle, color: COLORS.muted, display: "block", marginBottom: "4px" }}>{f.label}</label>
+              <input
+                type={f.type} value={f.value} placeholder={f.placeholder}
+                onChange={e => f.set(e.target.value)}
+                style={{ ...css.input, borderColor: f.label.includes("*") && !f.value.trim() ? COLORS.danger + "66" : COLORS.border }}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Toolbar */}
+        <div style={{ display: "flex", gap: ".5rem", marginBottom: ".75rem", alignItems: "center", flexWrap: "wrap" }}>
+          <input
+            type="text" placeholder="🔍 Talaba qidirish..." value={filter}
+            onChange={e => setFilter(e.target.value)}
+            style={{ ...css.input, width: "200px", flex: "0 0 auto" }}
+          />
+          {/* <input
+              type="number"
+              placeholder="Group"
+              value={groupFilter}
+              onChange={e => setGroupFilter(e.target.value)}
+              style={{ ...css.input, width: "90px", flex: "0 0 auto" }}
+            /> */}
+
+          {/* ✅ GROUP FILTER BUTTONS */}
+          <button onClick={() => setGroupFilter("")}
+            style={{ ...css.btn, background: groupFilter === "" ? COLORS.blue : COLORS.surface, color: groupFilter === "" ? "#fff" : COLORS.navy }}
+          >
+            All
+          </button>
+
+          <button onClick={() => setGroupFilter("1")}
+            style={{ ...css.btn, background: groupFilter === "1" ? COLORS.blue : COLORS.surface, color: groupFilter === "1" ? "#fff" : COLORS.navy }}
+          >
+            1
+          </button>
+
+          <button onClick={() => setGroupFilter("2")}
+            style={{ ...css.btn, background: groupFilter === "2" ? COLORS.blue : COLORS.surface, color: groupFilter === "2" ? "#fff" : COLORS.navy }}
+          >
+            2
+          </button>
+
+          <button onClick={() => setGroupFilter("3")}
+            style={{ ...css.btn, background: groupFilter === "3" ? COLORS.blue : COLORS.surface, color: groupFilter === "3" ? "#fff" : COLORS.navy }}
+          >
+            3
+          </button>
+
+
+          <div style={{ display: "flex", gap: ".4rem", marginLeft: "auto" }}>
+            {[0, 3, 4, 5].map(v => (
+              <button key={v} onClick={() => fillAll(v)} title={`Hammaga ${v}`}
+                style={{ ...css.btn, background: COLORS.surface, color: COLORS.navy, border: `1px solid ${COLORS.border}`, padding: ".35rem .7rem", fontSize: "12px" }}>
+                {v}
+              </button>
+            ))}
+            <button onClick={clearAll}
+              style={{ ...css.btn, background: COLORS.surface, color: COLORS.danger, border: `1px solid ${COLORS.border}`, padding: ".35rem .7rem", fontSize: "12px" }}>
+              Tozalash
+            </button>
+          </div>
+        </div>
+
+        {/* Grade sheet table */}
+        <div style={{
+          background: COLORS.white, border: `1px solid ${COLORS.border}`,
+          borderRadius: "14px", overflow: "hidden",
+          boxShadow: "0 4px 20px rgba(10,22,40,.07)", marginBottom: "1.25rem",
+        }}>
+          {/* Table header */}
+          <div style={{ display: "grid", gridTemplateColumns: "2.5rem 1fr 120px", background: COLORS.navy, padding: ".6rem 1rem", gap: ".75rem" }}>
+            {["#", "Talaba", "Baho (0–100)"].map(h => (
+              <span key={h} style={{ color: "#fff", fontSize: "11px", fontFamily: "sans-serif", fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase" }}>{h}</span>
+            ))}
+          </div>
+
+          {loadingS ? (
+            <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}><Spinner dark /></div>
+          ) : filtered.length === 0 ? (
+            <div style={{ padding: "2.5rem", textAlign: "center", color: COLORS.muted, fontFamily: "sans-serif" }}>Talaba topilmadi</div>
+          ) : (
+            <div style={{ maxHeight: "60vh", overflowY: "auto" }}>
+              {filtered.map((s, i) => {
+                const name  = `${s.first_name} ${s.last_name}`.trim();
+                const val   = scores[s.id] ?? "";
+                const clr   = scoreColor(val);
+                const isTop = s.color === "blue";
+                return (
+                  <div
+                    key={s.id}
+                    style={{
+                      display: "grid", gridTemplateColumns: "2.5rem 1fr 120px",
+                      padding: ".55rem 1rem", gap: ".75rem", alignItems: "center",
+                      background: i % 2 === 0 ? COLORS.white : COLORS.surface,
+                      borderBottom: `1px solid ${COLORS.border}`,
+                      transition: "background .15s",
+                    }}
+                  >
+                    {/* Index */}
+                    <span style={{ color: COLORS.muted, fontSize: "12px", fontFamily: "sans-serif" }}>{i + 1}</span>
+
+                    {/* Student */}
+                    <div style={{ display: "flex", alignItems: "center", gap: ".6rem", minWidth: 0 }}>
+                      <Avatar src={s.prof_pic} name={name} size={32} />
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ fontSize: "13px", fontWeight: 600, color: isTop ? COLORS.blue : COLORS.navy, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {name}
+                          {isTop && <span style={{ marginLeft: "5px", fontSize: "9px", color: COLORS.blue, fontFamily: "sans-serif", background: "#EFF6FF", borderRadius: "99px", padding: "1px 6px", border: "1px solid rgba(26,86,219,.2)" }}>★ Top</span>}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Score input */}
+                    <input
+                      type="text" inputMode="decimal" placeholder="—"
+                      value={val}
+                      onChange={e => setScore(s.id, e.target.value)}
+                      style={{
+                        width: "100%", padding: ".4rem .6rem", borderRadius: "8px",
+                        border: `2px solid ${val !== "" ? clr : COLORS.border}`,
+                        fontSize: "14px", fontFamily: "Georgia,serif", fontWeight: "bold",
+                        textAlign: "center", outline: "none", background: val !== "" ? `${clr}0f` : COLORS.white,
+                        color: val !== "" ? clr : COLORS.muted, transition: "all .2s",
+                        boxSizing: "border-box",
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Footer: summary + save */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: ".75rem" }}>
+          <div style={{ display: "flex", gap: ".75rem", flexWrap: "wrap" }}>
+            {[
+              { label: "Jami talabalar", val: students.length },
+              { label: "Baho kiritilgan", val: filledCount },
+              { label: "O'rtacha",        val: filledCount ? (Object.values(scores).filter(v => v !== "").reduce((a, v) => a + parseFloat(v), 0) / filledCount).toFixed(1) : "—" },
+            ].map(item => (
+              <div key={item.label} style={{ background: COLORS.white, border: `1px solid ${COLORS.border}`, borderRadius: "10px", padding: ".5rem .85rem", textAlign: "center", minWidth: "80px" }}>
+                <div style={{ fontSize: "9px", color: COLORS.muted, fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: ".08em" }}>{item.label}</div>
+                <div style={{ fontSize: "16px", fontWeight: "bold", color: COLORS.navy, fontFamily: "Georgia,serif" }}>{item.val}</div>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={handleSave} disabled={saving || filledCount === 0}
+            style={{
+              ...css.btn, background: saving || filledCount === 0 ? COLORS.muted : COLORS.navy,
+              color: "#fff", fontSize: "14px", padding: ".65rem 1.75rem",
+              cursor: saving || filledCount === 0 ? "not-allowed" : "pointer",
+              boxShadow: filledCount > 0 && !saving ? "0 4px 16px rgba(30,58,95,.35)" : "none",
+            }}
+          >
+            {saving
+              ? <><span style={{ width: 13, height: 13, border: "2px solid rgba(255,255,255,.4)", borderTop: "2px solid #fff", borderRadius: "50%", display: "inline-block", animation: "spin .7s linear infinite" }} /> Saqlanmoqda...</>
+              : `✓ ${filledCount} ta bahoni saqlash`}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
 // ─── ROOT ─────────────────────────────────────────────────────────────────────
 export default function App() {
   const [route, setRoute] = useState({ page: "home" });
@@ -1098,11 +1470,20 @@ export default function App() {
   }, []);
 
   const { page, stageId, studentId } = route;
+  // if (page === "home") return <HomePage onSelect={id => go("stage", { stageId: id })} />;
+  // if (page === "stage") return <StagePage stageId={stageId} onBack={() => go("home")} onStudents={() => go("studentList", { stageId })} onLessons={() => go("lessons", { stageId })} onMarks={() => go("marks", { stageId })} />;
+  // if (page === "studentList") return <StudentListPage stageId={stageId} onBack={() => go("stage", { stageId })} onSelect={id => go("studentDetail", { stageId, studentId: id })} />;
+  // if (page === "studentDetail") return <StudentDetailPage studentId={studentId} onBack={() => go("studentList", { stageId })} />;
+  // if (page === "lessons") return <LessonsPage stageId={stageId} onBack={() => go("stage", { stageId })} />;
+  // if (page === "marks") return <MarksPage stageId={stageId} onBack={() => go("stage", { stageId })} />;
+  // return null;
   if (page === "home") return <HomePage onSelect={id => go("stage", { stageId: id })} />;
-  if (page === "stage") return <StagePage stageId={stageId} onBack={() => go("home")} onStudents={() => go("studentList", { stageId })} onLessons={() => go("lessons", { stageId })} onMarks={() => go("marks", { stageId })} />;
+  if (page === "stage") return <StagePage stageId={stageId} onBack={() => go("home")} onStudents={() => go("studentList", { stageId })} onLessons={() => go("lessons", { stageId })} onMarks={() => go("marks", { stageId })} onAdmin={() => go("adminLogin", { stageId })} />;
   if (page === "studentList") return <StudentListPage stageId={stageId} onBack={() => go("stage", { stageId })} onSelect={id => go("studentDetail", { stageId, studentId: id })} />;
   if (page === "studentDetail") return <StudentDetailPage studentId={studentId} onBack={() => go("studentList", { stageId })} />;
   if (page === "lessons") return <LessonsPage stageId={stageId} onBack={() => go("stage", { stageId })} />;
   if (page === "marks") return <MarksPage stageId={stageId} onBack={() => go("stage", { stageId })} />;
+  if (page === "adminLogin") return <AdminLoginPage onBack={() => go("stage", { stageId })} onLogin={tok => go("adminMark", { stageId, adminToken: tok })} />;
+  if (page === "adminMark") return <AdminMarkPage stageId={stageId} token={route.adminToken} onBack={() => go("adminLogin", { stageId })} />;
   return null;
-}
+}   
