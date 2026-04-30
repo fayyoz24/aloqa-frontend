@@ -517,6 +517,90 @@ function LessonsPage({ stageId, onBack }) {
   );
 }
 
+// function PostCard({ lesson }) {
+//   const [currentImg, setCurrentImg] = useState(0);
+//   const imgs = lesson.images || [];
+
+//   return (
+//     <div style={{ background: COLORS.white, border: `1px solid ${COLORS.border}`, borderRadius: "12px", overflow: "hidden" }}>
+
+//       {/* Image carousel */}
+//       {imgs.length > 0 ? (
+//         <div style={{ position: "relative", background: "#000" }}>
+//           <img
+//             src={fixImg(imgs[currentImg]?.image)}
+//             alt=""
+//             style={{ width: "100%", aspectRatio: "4/5", objectFit: "cover", display: "block" }}
+//           />
+
+//           {imgs.length > 1 && (
+//             <>
+//               {/* Invisible tap zones for prev/next */}
+//               {currentImg > 0 && (
+//                 <div
+//                   onClick={() => setCurrentImg(i => i - 1)}
+//                   style={{ position: "absolute", left: 0, top: 0, width: "35%", height: "100%", cursor: "pointer" }}
+//                 />
+//               )}
+//               {currentImg < imgs.length - 1 && (
+//                 <div
+//                   onClick={() => setCurrentImg(i => i + 1)}
+//                   style={{ position: "absolute", right: 0, top: 0, width: "35%", height: "100%", cursor: "pointer" }}
+//                 />
+//               )}
+
+//               {/* Dot indicators */}
+//               <div style={{
+//                 position: "absolute", bottom: "10px", left: "50%", transform: "translateX(-50%)",
+//                 display: "flex", gap: "5px", alignItems: "center",
+//               }}>
+//                 {imgs.map((_, i) => (
+//                   <div
+//                     key={i}
+//                     onClick={() => setCurrentImg(i)}
+//                     style={{
+//                       width: i === currentImg ? 18 : 6,
+//                       height: 6,
+//                       borderRadius: "99px",
+//                       background: i === currentImg ? "#fff" : "rgba(255,255,255,0.5)",
+//                       cursor: "pointer",
+//                       transition: "all 0.2s ease",
+//                       flexShrink: 0,
+//                     }}
+//                   />
+//                 ))}
+//               </div>
+//             </>
+//           )}
+//         </div>
+//       ) : (
+//         <div style={{ width: "100%", aspectRatio: "4/5", background: `linear-gradient(135deg,${COLORS.navyMid},${COLORS.blue})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "48px" }}>
+//           📸
+//         </div>
+//       )}
+
+//       {/* Caption */}
+//       <div style={{ padding: "12px 14px 16px" }}>
+//         <h2 style={{ margin: "0 0 5px", fontSize: "18px", fontFamily: "sans-serif", color: COLORS.navy, fontWeight: "bold", lineHeight: 1.4 }}>
+//           {lesson.lesson_number}-dars
+//         </h2>
+//         {/* <p style={{ margin: "0 0 5px", fontSize: "14px", fontFamily: "sans-serif", color: COLORS.navy, fontWeight: "bold", lineHeight: 1.4 }}>
+//           {lesson.lesson_name}
+//         </p> */}
+//         <p style={{ margin: "0 0 8px", fontSize: "13px", fontFamily: "sans-serif", color: COLORS.navy, lineHeight: 1.6 }}>
+//           {lesson.highlight_text}
+//         </p>
+//         <p style={{ margin: 0, fontSize: "11px", fontFamily: "sans-serif", color: COLORS.muted }}>
+//           {lesson.created_at
+//             ? new Date(lesson.created_at).toLocaleDateString("uz-UZ", { day: "numeric", month: "long", year: "numeric" })
+//             : ""}
+//         </p>
+//       </div>
+//     </div>
+//   );
+// }
+
+
 function PostCard({ lesson }) {
   const [currentImg, setCurrentImg] = useState(0);
   const imgs = lesson.images || [];
@@ -524,54 +608,84 @@ function PostCard({ lesson }) {
   return (
     <div style={{ background: COLORS.white, border: `1px solid ${COLORS.border}`, borderRadius: "12px", overflow: "hidden" }}>
 
-      {/* Image carousel */}
       {imgs.length > 0 ? (
-        <div style={{ position: "relative", background: "#000" }}>
-          <img
-            src={fixImg(imgs[currentImg]?.image)}
-            alt=""
-            style={{ width: "100%", aspectRatio: "4/5", objectFit: "cover", display: "block" }}
-          />
+        <div style={{ position: "relative" }}>
 
-          {imgs.length > 1 && (
-            <>
-              {/* Invisible tap zones for prev/next */}
-              {currentImg > 0 && (
-                <div
-                  onClick={() => setCurrentImg(i => i - 1)}
-                  style={{ position: "absolute", left: 0, top: 0, width: "35%", height: "100%", cursor: "pointer" }}
-                />
-              )}
-              {currentImg < imgs.length - 1 && (
-                <div
-                  onClick={() => setCurrentImg(i => i + 1)}
-                  style={{ position: "absolute", right: 0, top: 0, width: "35%", height: "100%", cursor: "pointer" }}
-                />
-              )}
-
-              {/* Dot indicators */}
-              <div style={{
-                position: "absolute", bottom: "10px", left: "50%", transform: "translateX(-50%)",
-                display: "flex", gap: "5px", alignItems: "center",
-              }}>
-                {imgs.map((_, i) => (
-                  <div
-                    key={i}
-                    onClick={() => setCurrentImg(i)}
+          {/* 
+            ✅ Use background-image instead of <img>
+            - background-size: "contain" → shows full image, no cropping (recommended for screenshots)
+            - background-size: "cover"   → fills frame, crops edges (good for photos)
+          */}
+          <div
+            style={{
+              width: "100%",
+              aspectRatio: "4/5",
+              background: `#111 url(${fixImg(imgs[currentImg]?.image)}) center/contain no-repeat`,
+              position: "relative",
+            }}
+          >
+            {imgs.length > 1 && (
+              <>
+                {currentImg > 0 && (
+                  <button
+                    onClick={() => setCurrentImg(i => i - 1)}
                     style={{
-                      width: i === currentImg ? 18 : 6,
-                      height: 6,
-                      borderRadius: "99px",
-                      background: i === currentImg ? "#fff" : "rgba(255,255,255,0.5)",
-                      cursor: "pointer",
-                      transition: "all 0.2s ease",
-                      flexShrink: 0,
+                      position: "absolute", left: "8px", top: "50%", transform: "translateY(-50%)",
+                      background: "rgba(0,0,0,0.5)", border: "none", borderRadius: "50%",
+                      width: "34px", height: "34px", display: "flex", alignItems: "center",
+                      justifyContent: "center", cursor: "pointer", color: "#fff", fontSize: "20px",
+                      lineHeight: 1,
                     }}
-                  />
-                ))}
-              </div>
-            </>
-          )}
+                  >‹</button>
+                )}
+                {currentImg < imgs.length - 1 && (
+                  <button
+                    onClick={() => setCurrentImg(i => i + 1)}
+                    style={{
+                      position: "absolute", right: "8px", top: "50%", transform: "translateY(-50%)",
+                      background: "rgba(0,0,0,0.5)", border: "none", borderRadius: "50%",
+                      width: "34px", height: "34px", display: "flex", alignItems: "center",
+                      justifyContent: "center", cursor: "pointer", color: "#fff", fontSize: "20px",
+                      lineHeight: 1,
+                    }}
+                  >›</button>
+                )}
+
+                {/* Dot indicators */}
+                <div style={{
+                  position: "absolute", bottom: "10px", left: "50%", transform: "translateX(-50%)",
+                  display: "flex", gap: "5px", alignItems: "center",
+                }}>
+                  {imgs.map((_, i) => (
+                    <div
+                      key={i}
+                      onClick={() => setCurrentImg(i)}
+                      style={{
+                        width: i === currentImg ? 18 : 6,
+                        height: 6,
+                        borderRadius: "99px",
+                        background: i === currentImg ? "#fff" : "rgba(255,255,255,0.5)",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
+                        flexShrink: 0,
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.5)",
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Counter badge */}
+                <div style={{
+                  position: "absolute", top: "10px", right: "10px",
+                  background: "rgba(0,0,0,0.5)", color: "#fff",
+                  fontSize: "12px", fontFamily: "sans-serif",
+                  padding: "2px 8px", borderRadius: "99px",
+                }}>
+                  {currentImg + 1}/{imgs.length}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       ) : (
         <div style={{ width: "100%", aspectRatio: "4/5", background: `linear-gradient(135deg,${COLORS.navyMid},${COLORS.blue})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "48px" }}>
@@ -584,9 +698,6 @@ function PostCard({ lesson }) {
         <h2 style={{ margin: "0 0 5px", fontSize: "18px", fontFamily: "sans-serif", color: COLORS.navy, fontWeight: "bold", lineHeight: 1.4 }}>
           {lesson.lesson_number}-dars
         </h2>
-        {/* <p style={{ margin: "0 0 5px", fontSize: "14px", fontFamily: "sans-serif", color: COLORS.navy, fontWeight: "bold", lineHeight: 1.4 }}>
-          {lesson.lesson_name}
-        </p> */}
         <p style={{ margin: "0 0 8px", fontSize: "13px", fontFamily: "sans-serif", color: COLORS.navy, lineHeight: 1.6 }}>
           {lesson.highlight_text}
         </p>
@@ -599,7 +710,6 @@ function PostCard({ lesson }) {
     </div>
   );
 }
-
 
 // ─── MARKS ────────────────────────────────────────────────────────────────────
 // function MarksPage({ stageId, onBack }) {
